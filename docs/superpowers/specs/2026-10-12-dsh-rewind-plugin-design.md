@@ -86,14 +86,18 @@ workspace-hash 为工作区绝对路径的稳定哈希，避免路径分隔符�
 3. `git add -A`（排除 `.git`、`node_modules`、`.dsh` 及配置 ignore 规则）→ commit（message 含 session 与 turn 标识）；
 4. 计算 treeHash（`git write-tree`），写入检查点索引。
 
+"写类工具"判定：v1 采用静态清单（`write`、`edit`、`bash`、terminal 写入类等具备文件变更副作用的工具），随 Config 暴露 `writeTools` 允许追加；后续可结合 `fs/observed` 事件自动学习。
+
 ### 6.2 回退（点击第 N 轮撤回图标 / `/rewind` / agent 调用工具）
 
 1. **二次确认**：展示受影响文件清单（修改 / 新增 / 删除三类），用户确认；
 2. **安全点**：当前状态先 commit 进影子仓库（trigger=`safety`），回退永远可反悔；
-3. **对话回退**：`sessions.fork(原会话, boundarySeq[N])`，新会话自动命名 `「原会话名 · ↩N」`；
-4. **代码回退**：按"当前树 → 检查点树"的 diff 精确应用：修改的还原、新增的删除、删除的恢复；
-5. **校验**：重扫工作区，`git write-tree` 结果必须等于检查点 treeHash；
-6. 原会话标注"已回退至第 N 轮"（保留、可切回），UI 跳转到分叉会话。
+3. **代码回退**：按"当前树 → 检查点树"的 diff 精确应用：修改的还原、新增的删除、删除的恢复；
+4. **校验**：重扫工作区，`git write-tree` 结果必须等于检查点 treeHash；不等则 checkout 回 safety 点并报错，**不进行对话分叉**；
+5. **对话回退**：校验通过后才 `sessions.fork(原会话, boundarySeq[N])`；若 fork 失败，同样 checkout 回 safety 点回滚代码；
+6. 原会话标注"已回退至第 N 轮"（保留、可切回），UI 跳转到分叉会话 `「原会话名 · ↩N」`。
+
+> 顺序约束：代码先恢复、校验通过后才分叉对话，保证不存在"对话已回退而代码未回退"的中间态。
 
 ## 7. 正确性保证
 
@@ -135,6 +139,7 @@ workspace-hash 为工作区绝对路径的稳定哈希，避免路径分隔符�
 | `enabled` | boolean | true | 总开关 |
 | `autoSnapshot` | `'all' \| 'turn-only' \| 'off'` | `'all'` | turn 边界 / 写前 / 关闭 |
 | `ignoreRules` | string[] | 内置默认 | 追加快照排除规则 |
+| `writeTools` | string[] | 内置静态清单 | 触发写前快照的工具名，可追加 |
 | `confirmBeforeRestore` | boolean | true | 回退前二次确认 |
 
 ## 11. 范围
