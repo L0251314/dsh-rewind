@@ -1,0 +1,9 @@
+# 研究用 DSH 源码参考（从 app.asar 提取，不入库）
+asar-out/
+
+# 依赖与构建产物
+node_modules/
+dist/
+
+# 运行时数据
+*.log
