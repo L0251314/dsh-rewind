@@ -34,7 +34,7 @@ DeepSeek Harness 桌面端的"代码回滚 + 会话回滚"插件：悬停任意�
 在 DeepSeek Harness 桌面端的"插件"页选择"从 Git 仓库安装"，填入本仓库地址；或用 CLI 执行：
 
 ```powershell
-dsh plugin add <本仓库 Git 地址>
+dsh plugin add https://github.com/L0251314/dsh-rewind
 ```
 
 **方式二：从本地路径安装**
@@ -42,7 +42,7 @@ dsh plugin add <本仓库 Git 地址>
 先把本仓库克隆到本地，然后在插件页选择"从本地路径安装"，指向克隆后的仓库目录：
 
 ```powershell
-git clone <本仓库 Git 地址>
+git clone https://github.com/L0251314/dsh-rewind
 ```
 
 加载成功的标志：启动日志出现 `[dsh-rewind] 已加载（代码回滚 + 会话回滚）`。
