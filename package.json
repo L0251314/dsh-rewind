@@ -1,39 +1,48 @@
 {
   "name": "dsh-rewind",
   "version": "0.1.0",
-  "description": "DSH 代码回滚与对话恢复插件：影子 git 全树快照 + 会话分叉回退（Trae / Claude Code /rewind 风格）。每轮对话尾部撤回图标、/rewind 命令、checkpoint_* agent 工具，恢复精确到 tree hash 校验。",
+  "description": "DeepSeek Harness 桌面端回滚插件：代码回滚 + 会话回滚（悬停消息一键回退，快照式、不碰 git）",
+  "type": "module",
+  "main": "lib/index.js",
   "keywords": [
     "dsh",
     "dsh-plugin",
     "deepseek-harness",
-    "checkpoint",
-    "rollback",
     "rewind",
-    "time-travel"
-  ],
-  "type": "module",
-  "main": "lib/index.js",
-  "exports": {
-    ".": "./lib/index.js",
-    "./client": "./lib/client.js",
-    "./package.json": "./package.json"
-  },
-  "files": [
-    "lib",
-    "cordis.patch.yml",
-    "README.md"
+    "checkpoint",
+    "rollback"
   ],
   "scripts": {
     "test": "node --test test/"
   },
+  "files": [
+    "lib",
+    "client.js",
+    "assets",
+    "cordis.patch.yml",
+    "README.md"
+  ],
+  "exports": {
+    ".": "./lib/index.js",
+    "./client": "./client.js"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "*",
+    "@deepseek-ai/dsh-tools": "*"
+  },
   "dsh": {
-    "bundle": {
-      "patch": "./cordis.patch.yml"
-    },
     "client": {
       "platform": "web",
       "immediately": true
+    },
+    "bundle": {
+      "patch": "./cordis.patch.yml"
     }
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TODO-USER/dsh-rewind.git"
+  },
+  "author": {},
   "license": "MIT"
 }
